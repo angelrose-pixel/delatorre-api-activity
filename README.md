@@ -42,5 +42,5 @@ Returning a 404 Not Found status code clearly indicates that the requested dish 
 ---
 
 ### 4. Testing
-![Screenshot](image.png)
-# delatorre-api-activity
+![Screenshot](./image.png)
+
