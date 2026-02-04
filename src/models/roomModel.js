@@ -1,34 +1,16 @@
-const { type } = require("node:os");
+const mongoose = require('mongose');
 
-// src/models/roomModel.js
-const rooms = [
-    {
-        id: 101,
-        type: "Single",
-        price: 100,
-        isbooked: false,
-        features: ['WiFi', 'TV'],
+// This is the *Ruole Book* for a Room
+const roomSchema = new  mongoose.Schema({
+    roomNumber: {
+        type: Number, // Number: 101
+        required: true,
+        unique: true, // No duplicate room numbers allowed
     },
-    {
-        id: 102,
-        type: "Double",
-        price: 150,
-        isbooked: true,
-        features: ['WiFi', 'TV', 'Mini Bar'],
+
+    type: {
+        type: String, // Text: "Single", "Suite"
+        required: true,
     },
-    {
-        id: 201,
-        type: "Suite",
-        price: 300,
-        isbooked: false,
-        features: ['WiFi', 'TV', 'Mini Bar', 'Jacuzzi'],
-    },
-    {
-        id: 202,
-        type: 'Single',
-        price: 100,
-        isbooked: false,
-        features: ['WiFi'],
-    },
-];
-module.exports = rooms;
+})
+

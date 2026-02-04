@@ -1,0 +1,5 @@
+PORT=3000
+BASE_URI=/api/v1
+
+MONGO_URI=mongodb+srv://delatorre_3f:dejan05@myfirstdb.alighz0.mongodb.net/?appName=MyFirstDB
+
