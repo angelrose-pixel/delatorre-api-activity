@@ -1,102 +1,29 @@
-const express = require('express' );
-const router = express.Router() ;
-const rooms = require('../models/roomModel' ) ;
+const express = require('express');
+const router = express.Router();
+const { protect, authorize } = require('../middleware/authMiddleware');
+// Import the controller
+const {
+  getAllRooms,
+  createRoom,
+  getRoomById,
+  updateRoom,
+  deleteRoom
+} = require('../controllers/roomController');
 
-router.get("/", (req, res) => {
-  res.status(200).json({
-    status: "success",
-    message: "API is running",
-    endpoints: {
-      rooms: "/api/v1/rooms"
-    }
-  });
-});
+const {
+  getAllbooks,
+    createbooks,
+} = require('../controllers/bookingController');
 
-router.get("/rooms", (req, res) => {
-  res.status(200).json({
-    status: "success",
-    message: "Rooms retrieved successfully",
-    data: rooms
-  });
-});
+router.get("/bookings", getAllbooks);
+router.post("/bookings", protect, authorize('admin', 'manager'), createbooks);
 
 
-router.post("/rooms", (req, res) => {
-  const { type, price, isBooked } = req.body;
-
-  if (!type || !price || isBooked === undefined) {
-    return res.status(400).json({
-      status: "error",
-      message: "All fields are required",
-      data: null
-    });
-  }
-
-  const newRoom = {
-    id: rooms.length + 1,
-    type,
-    price,
-    isBooked
-  };
-
-  rooms.push(newRoom);
-
-  res.status(201).json({
-    status: "success",
-    message: "Room created successfully",
-    data: newRoom
-  });
-});
-
-
-router.put("/rooms/:id", (req, res) => {
-  const roomId = parseInt(req.params.id);
-  const { type, price, isBooked } = req.body;
-
-  const roomIndex = rooms.findIndex(room => room.id === roomId);
-
-  if (roomIndex === -1) {
-    return res.status(404).json({
-      status: "error",
-      message: "Room not found",
-      data: null
-    });
-  }
-
-  rooms[roomIndex] = {
-    id: roomId,
-    type,
-    price,
-    isBooked
-  };
-
-  res.status(200).json({
-    status: "success",
-    message: "Room updated successfully",
-    data: rooms[roomIndex]
-  });
-});
-
-
-router.delete("/rooms/:id", (req, res) => {
-  const roomId = parseInt(req.params.id);
-  const roomIndex = rooms.findIndex(room => room.id === roomId);
-
-  if (roomIndex === -1) {
-    return res.status(404).json({
-      status: "error",
-      message: "Room not found",
-      data: null
-    });
-  }
-
-  const deletedRoom = rooms.splice(roomIndex, 1);
-
-  res.status(200).json({
-    status: "success",
-    message: "Room deleted successfully",
-    data: deletedRoom
-  });
-});
+// Routes
+router.get("/rooms", getAllRooms);
+router.post("/rooms", protect, authorize('admin', 'manager'), createRoom);
+router.get("/rooms/:id", getRoomById);
+router.put("/rooms/:id", protect, authorize('admin', 'manager'), updateRoom);
+router.delete("/rooms/:id", protect, authorize('admin', 'manager'), deleteRoom);
 
 module.exports = router;

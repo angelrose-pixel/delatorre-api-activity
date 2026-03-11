@@ -1,7 +1,9 @@
 // server. js
 require('dotenv').config();
 const express = require('express' );
-const connectDB = require('./src.config/db');
+const connectDB = require('./src/config/db');
+const apiRoutes = require('./src/routes/apiRoutes');
+const authRoutes = require('./src/routes/authRoutes');
 const app = express ();
 connectDB();
 
@@ -13,17 +15,10 @@ app.use(express.urlencoded({ extended: true}));
 const PORT = process.env.PORT || 3000;
 const BASE_URI = process.env.BASE_URI || '/api/v1';
 
-
-const apiRoutes = require('./src/routes/apiRoutes');
-app.use(BASE_URI, apiRoutes);
-
-// Test route
-app.get('/test', (req, res) => {
-  res.json({ message: 'Server is working' });
-});
+app.use(process.env.BASE_URI, authRoutes);
+app.use(process.env.BASE_URI, apiRoutes);
 
 app.listen(PORT, () => {
-console.log(`Server running on port ${PORT}`);
-console.log(`BaseURI: http://localhost:${PORT}${BASE_URI}`);
+    console.log(`Server running on port ${PORT}`);
+    console.log(`API Base URI: http://localhost:${PORT}${BASE_URI}`);
 });
-

@@ -44,3 +44,21 @@ Returning a 404 Not Found status code clearly indicates that the requested dish 
 ### 4. Testing
 ![Screenshot](./image.png)
 
+**Secure API**
+
+1. Authentication vs Authorization
+
+Answer:
+Authentication checks if the user is really who they say they are. In our code, this happens when the user logs in with their email and password. If the credentials are correct, the system logs them in and gives a token.
+
+Authorization happens after login. It checks what the user is allowed to access. The protect middleware makes sure only logged-in users can use protected routes.
+
+2. Security (bcrypt)
+
+Answer:
+We used bcryptjs to hash passwords instead of saving them as plain text. This makes passwords safer because the real password is not stored in the database. Even if someone accesses the database, they will only see the hashed version of the password.
+
+3. JWT Structure
+
+Answer:
+The protect middleware gets the JWT from the request header and checks if it is valid. If the token is correct, it finds the user in the database and allows access to the protected route. If the token is missing or invalid, the request is denied.
